@@ -2,7 +2,9 @@
 
 namespace E7\PHPUnit\Constraint;
 
-class ObjectHasMethod extends \PHPUnit\Framework\Constraint
+use PHPUnit\Framework\Constraint\Constraint as AbstractConstraint;
+
+class ObjectHasMethod extends AbstractConstraint
 {
     /** @var string */
     private $method;
@@ -17,7 +19,12 @@ class ObjectHasMethod extends \PHPUnit\Framework\Constraint
         $this->method = $method;
     }
     
-    public function __toString()
+    public function __toString():string
+    {
+        return 'method exists';
+    }
+
+    public function toString():string
     {
         return 'method exists';
     }
@@ -25,8 +32,8 @@ class ObjectHasMethod extends \PHPUnit\Framework\Constraint
     /**
      * @inheritdoc
      */
-    public function matches($object)
+    public function matches($other):bool
     {
-        return method_exists($object, $this->method);
+        return method_exists($other, $this->method);
     }
 }

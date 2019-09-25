@@ -16,12 +16,12 @@
     },
     "autoload": {
         "psr-4": {
-            "E7\\": "src/E7"
+            "E7\\": "src/E7/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "E7\\Tests\\": "tests/E7"
+            "E7\\Tests\\": "tests/E7/"
         }
     }
 }
