@@ -16,11 +16,6 @@ class ObjectHasMethod extends AbstractConstraint
     {
         $this->method = $method;
     }
-    
-    public function __toString():string
-    {
-        return 'method exists';
-    }
 
     public function toString():string
     {
