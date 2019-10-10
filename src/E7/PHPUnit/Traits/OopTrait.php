@@ -7,13 +7,23 @@ use E7\PHPUnit\Constraint\ObjectHasMethod;
 trait OopTrait
 {
     /**
-     * @param string $method
+     * @param string        $method
      * @param object|string $object
-     * @param string $message
+     * @param string        $message
      */
     public function assertObjectHasMethod($method, $object, $message = '')
     {
         static::assertThat($object, new ObjectHasMethod($method), $message);
+    }
+
+    /**
+     * @param object|string $object
+     * @param string        $message
+     */
+    public function assertObjectHasConstructor($object, $message = '')
+    {
+        $message = !empty($message) ? $message : 'Constructor does not exist';
+        $this->assertObjectHasMethod('__constructor', $object, $message);
     }
 
     /**
@@ -35,7 +45,7 @@ trait OopTrait
         $method = 'set' . $property;
 
         $this->assertObjectHasMethod($method, $object, 'Setter does not exists');
-        $this->assertEquals($object, call_user_func([$object, $method]), 'Setter does not support fluent interface (method chaining).');
+        $this->assertSame($object, call_user_func([$object, $method]), 'Setter does not support fluent interface (method chaining)');
     }
 
     /**
@@ -57,7 +67,7 @@ trait OopTrait
         $method = 'get' . $property;
 
         $this->assertObjectHasMethod($method, $object, 'Getter does not exists');
-        $this->assertEquals($object, call_user_func([$object, $method]), 'Getter does not return the expected value.');
+        $this->assertEquals($object, call_user_func([$object, $method]), 'Getter does not return the expected value');
     }
 
     /**
@@ -80,5 +90,20 @@ trait OopTrait
 
         $this->doTestSetter($object, $property, $value, $options);
         $this->doTestGetter($object, $property, $value, $options);
+    }
+
+    /**
+     * @param object $object
+     * @param array  $types
+     *
+     * @return void
+     */
+    protected function doTestObjectIsInstanceOf(
+        object $object,
+        array $types
+    ) {
+        foreach ($types as $type) {
+            $this->assertInstanceOf($type, $object, 'Object is not an instance of ' . $type);
+        }
     }
 }

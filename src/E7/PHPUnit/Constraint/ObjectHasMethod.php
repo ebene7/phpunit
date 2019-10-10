@@ -2,8 +2,6 @@
 
 namespace E7\PHPUnit\Constraint;
 
-use PHPUnit\Framework\Constraint\Constraint as AbstractConstraint;
-
 class ObjectHasMethod extends AbstractConstraint
 {
     /** @var string */
