@@ -37,15 +37,19 @@ trait OopTrait
      * @return void
      */
     protected function doTestSetter(
-        object $object,
+        $object,
         string $property,
-        mixed $value = null,
+        $value = null,
         array $options = []
     ) {
         $method = 'set' . $property;
 
         $this->assertObjectHasMethod($method, $object, 'Setter does not exists');
-        $this->assertSame($object, call_user_func([$object, $method]), 'Setter does not support fluent interface (method chaining)');
+        $this->assertSame(
+            $object,
+            call_user_func([$object, $method], $value),
+            'Setter does not support fluent interface (method chaining)'
+        );
     }
 
     /**
@@ -59,15 +63,15 @@ trait OopTrait
      * @return void
      */
     protected function doTestGetter(
-        object $object,
+        $object,
         string $property,
-        mixed $value = null,
+        $value = null,
         array $options = []
     ) {
         $method = 'get' . $property;
 
         $this->assertObjectHasMethod($method, $object, 'Getter does not exists');
-        $this->assertEquals($object, call_user_func([$object, $method]), 'Getter does not return the expected value');
+        $this->assertSame($value, call_user_func([$object, $method]), 'Getter does not return the expected value');
     }
 
     /**
@@ -83,7 +87,7 @@ trait OopTrait
     protected function doTestGetterAndSetter(
         $object,
         string $property,
-        mixed $value = null,
+        $value = null,
         array $options = []
     ) {
         $value = $value ?: md5(rand(1, 10000));
@@ -99,7 +103,7 @@ trait OopTrait
      * @return void
      */
     protected function doTestObjectIsInstanceOf(
-        object $object,
+        $object,
         array $types
     ) {
         foreach ($types as $type) {
