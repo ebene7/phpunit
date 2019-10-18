@@ -2,8 +2,15 @@
 
 namespace E7\PHPUnit\Traits;
 
+use Countable;
 use E7\PHPUnit\Constraint\ObjectHasMethod;
+use IteratorAggregate;
+use Traversable;
 
+/**
+ * Trait OopTrait
+ * @package E7\PHPUnit\Traits
+ */
 trait OopTrait
 {
     /**
@@ -109,5 +116,45 @@ trait OopTrait
         foreach ($types as $type) {
             $this->assertInstanceOf($type, $object, 'Object is not an instance of ' . $type);
         }
+    }
+    
+    /**
+     * 
+     * @param object $object
+     */
+    protected function doTestMagicMethodToString($object)
+    {
+        $this->assertInternalType('object', $object);
+        $this->assertObjectHasMethod('__toString', $object);
+        $this->assertInternalType('string', $object->__toString());
+        $this->assertInternalType('string', (string) $object);
+    }
+    
+    /**
+     * Test template for SPL Countable implementation
+     * 
+     * @param object $object
+     */
+    protected function doTestSplCountableImplementation($object)
+    {
+        $this->assertInternalType('object', $object);
+        $this->assertInstanceOf(Countable::class, $object);
+        $this->assertObjectHasMethod('count', $object);
+        $this->assertInternalType('int', $object->count());    
+        $this->assertInternalType('int', count($object));    
+        $this->assertEquals($object->count(), count($object));    
+    }
+    
+    /**
+     * Test template for SPL IteratorAggregate implementation
+     * 
+     * @param object $object
+     */
+    protected function doTestSplIteratorAggregateImplementation($object)
+    {
+        $this->assertInternalType('object', $object);
+        $this->assertInstanceOf(IteratorAggregate::class, $object);
+        $this->assertObjectHasMethod('getIterator', $object);
+        $this->assertInstanceOf(Traversable::class, $object->getIterator());
     }
 }
